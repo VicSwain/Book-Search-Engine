@@ -7,6 +7,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
+import AppNavbar from './components/Navbar';
 
 
 // Construct our main GraphQL API endpoint
@@ -37,7 +38,7 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Navbar />
+      <AppNavbar />
       <Outlet />
     </ApolloProvider>
   );
