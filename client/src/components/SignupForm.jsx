@@ -29,13 +29,13 @@ const SignupForm = () => {
       event.preventDefault();
       event.stopPropagation();
     }
-      setValidated(true);
+      // setValidated(true);
 
     try {
       const { data } = await addUser({
         variable: { ...userFormData }
       });
-
+      console.log(data);
       const { token, user } = data.addUser;
       console.log(user);
       Auth.login(token);
