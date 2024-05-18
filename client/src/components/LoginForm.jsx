@@ -25,7 +25,7 @@ const LoginForm = () => {
       event.preventDefault();
       event.stopPropagation();
     }
-      // setValidated(true);
+      setValidated(true);
 
     try {
       const { data } = await loginUser({
