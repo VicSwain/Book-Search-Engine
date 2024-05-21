@@ -1,8 +1,9 @@
+
 // import user model
 const { Query } = require('mongoose');
 const { User } = require('../models');
 // import sign token function from auth
-const { signToken, AuthenticationError } = require('../utils/auth');
+const { signToken } = require('../utils/auth');
 
 
 const resolvers = {
@@ -11,7 +12,7 @@ const resolvers = {
             if (context.user) {
                 return await User.findById(context.user.id).populate('savedBooks');
             }
-            throw new AuthenticationError('You are not logged in.');
+            throw new Error ('You are not logged in.');
         }
     },
     Mutation: {
@@ -25,20 +26,23 @@ const resolvers = {
                 throw new Error ('Incorrect Password');
             }
             const token = signToken(user);
+            
             return { token, user };
+            
         }, 
 
         addUser: async (parent, { username, email, password }) => {
             const user = await User.create({ username, email, password });
             const token = signToken(user);
+            console.log(token, user );
             return { token, user };
         },
 
-        saveBook: async (parent, { bookInput }, context ) => {
+        saveBook: async (parent, { BookInput }, context ) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     {_id: context.user.id },
-                    { $addToSet: {savedBooks: bookInput } },
+                    { $addToSet: {savedBooks: BookInput } },
                     {new: true } 
                 ).populate('savedBooks');
                 return updatedUser;
