@@ -1,4 +1,3 @@
-
 import { Container, Card, Button, Row, Col } from 'react-bootstrap';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_ME } from '../utils/queries'
@@ -8,10 +7,11 @@ import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
+  console.log({data});
   const [removeBook] = useMutation(REMOVE_BOOK);
 
   const userData = data?.me || [];
-  console.log(userData);
+  console.log(userData.savedBooks?.length);
 
   // create function that accepts the book's bookId value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
