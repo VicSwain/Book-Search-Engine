@@ -1,18 +1,17 @@
 const typeDefs = `
  type User {
     _id: ID!
-    username: String!
-    email: String!
-    bookCount: Int
-    password: String!
-    savedBooks: [Book]!
+    username: String
+    email: String
+    password: String
+    savedBooks: [Book]
  }
 
  type Book {
-    bookID: ID!
-    authors: [String]!
-    description: String!
-    title: String!
+    bookId: String!
+    authors: [String]
+    description: String
+    title: String
     image: String
     link: String 
  }
@@ -21,9 +20,18 @@ const typeDefs = `
     token: ID!
     user: User
  }
-
- type Query {
  
+ input BookInput {
+    authors: [String]
+    description: String!
+    title: String!
+    bookId: String!
+    image: String
+    link: String
+ }
+
+ 
+ type Query {
     me: User
  }
 
@@ -31,17 +39,9 @@ const typeDefs = `
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     saveBook(bookInput: BookInput!): User
-    removeBook(bookID: ID!): User
+    removeBook(bookId: String!): User
  }
 
- input BookInput {
-    authors: [String]!
-    description: String!
-    title: String!
-    bookID: ID!
-    image: String
-    link: String
- }
 `;
 
 module.exports = typeDefs;
