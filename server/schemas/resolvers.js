@@ -9,10 +9,15 @@ const { signToken } = require('../utils/auth');
 const resolvers = {
     Query: {
         me: async (parent, args, context) => {
-            if (context.user) {
-                return await User.findById(context.user.id).populate('savedBooks');
+            try{
+                if (context.user) {
+                    return await User.findById(context.user._id).populate('savedBooks');
+                }
+
+            } catch (err){
+                console.log("Error in my query me: ", err);
+                throw new Error ('You are not logged in.');
             }
-            throw new Error ('You are not logged in.');
         }
     },
     Mutation: {
@@ -38,13 +43,14 @@ const resolvers = {
             return { token, user };
         },
 
-        saveBook: async (parent, { BookInput }, context ) => {
+        saveBook: async (parent, { bookInput }, context ) => {
+            console.log('I hit this SAVE BOOK ROUTE route');
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     {_id: context.user.id },
-                    { $addToSet: {savedBooks: BookInput } },
+                    { $addToSet: {savedBooks: bookInput } },
                     {new: true } 
-                ).populate('savedBooks');
+                ).populate('savedBook');
                 return updatedUser;
             }
             throw new Error('You must be logged in for this');
