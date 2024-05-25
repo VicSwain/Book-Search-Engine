@@ -26,17 +26,19 @@ const LoginForm = () => {
       event.stopPropagation();
     }
       setValidated(true);
-
+      console.log({ ...userFormData });
     try {
       const { data } = await loginUser({
-        variable: { ...userFormData }
-      });
+        variables: { ...userFormData }
+      }
+    );
 
     
-
-      const { token, user } = await data.loginUser;
-      console.log(user);
-      Auth.login(token);
+      console.log('Check to see');
+      // const { token, user } = await data.loginUser;
+      // console.log(data);
+      
+      Auth.login(data.login.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
