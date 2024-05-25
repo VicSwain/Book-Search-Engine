@@ -22,6 +22,7 @@ const resolvers = {
     },
     Mutation: {
         login: async (parent, { email, password }) => {
+            console.log(email, password);
             const user = await User.findOne({ email });
             if (!user) {
                 throw new Error ('User not found');
@@ -47,22 +48,24 @@ const resolvers = {
             console.log('I hit this SAVE BOOK ROUTE route');
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
-                    {_id: context.user.id },
+                    {_id: context.user._id },
                     { $addToSet: {savedBooks: bookInput } },
-                    {new: true } 
-                ).populate('savedBook');
+                    {new: true } );
                 return updatedUser;
             }
             throw new Error('You must be logged in for this');
         }, 
 
         removeBook: async (parent, { bookId }, context) => {
+            console.log('Remove Book Route HIT');
             if (context.user) {
+                console.log(bookId);
                 const updatedUser = await User.findOneAndUpdate(
-                    { _id: context.user.id },
+                    { _id: context.user._id },
                     { $pull : {savedBooks: { bookId } } },
                     { new: true }
-                ).populate('savedBooks');
+                );
+                // console.log(updatedUser);
                 return updatedUser;
             }
             throw new Error('You must be logged in for this')

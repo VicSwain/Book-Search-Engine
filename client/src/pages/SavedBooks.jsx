@@ -7,7 +7,7 @@ import { removeBookId } from '../utils/localStorage';
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
-  console.log({data});
+  
   const [removeBook] = useMutation(REMOVE_BOOK);
 
   const userData = data?.me || [];
@@ -16,7 +16,7 @@ const SavedBooks = () => {
   // create function that accepts the book's bookId value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
-
+    console.log(token);
     if (!token) {
       return false;
     }
@@ -24,13 +24,16 @@ const SavedBooks = () => {
     try {
       await removeBook({
         variables: { bookId },
-        // update: (cache, { data: { removeBook } }) => {
-        //   const { me } = cache.readQuery({ query: GET_ME });
-        //   cache.writeQuery({
-        //     query: GET_ME,
-        //     data: { me: { ...me, savedBooks: removeBook.savedBooks } },
-        //   });
-        // },
+        update: (cache, { data: { removeBook } }) => {
+          const { me } = cache.readQuery({ query: GET_ME });
+          console.log(me);
+          cache.writeQuery({
+            query: GET_ME,
+            data: { me: { ...me, savedBooks: removeBook.savedBooks } },
+            
+          });
+          console.log(data);
+        },
       });
 
       // upon success, remove book's id from localStorage
@@ -47,7 +50,7 @@ const SavedBooks = () => {
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <div className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
