@@ -1,9 +1,7 @@
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig,  } from 'vite'
 import react from '@vitejs/plugin-react'
-import {__dirname} from 'path';
 // https://vitejs.dev/config/
 export default defineConfig (({mode}) => {
-  const env = loadEnv(mode, __dirname, '')
   return {
   plugins: [react()],
   server: {
@@ -11,7 +9,7 @@ export default defineConfig (({mode}) => {
     open: true,
     proxy: {
       '/graphql': {
-        target: env.PORT || "localhost:3001",
+        target:  "https://vic-swain-book-search-engine.onrender.com",
         secure: false,
         changeOrigin: true
       }
